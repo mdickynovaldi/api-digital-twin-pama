@@ -58,6 +58,19 @@ let analysisId = "";
   check("GET /analyses/{id} -> 200", res.status === 200, res.status);
 }
 
+// GET ALL GEO POINTS (no id, coordinates only)
+{
+  const res = await app.request("/geo-points");
+  const body = (await res.json()) as any[];
+  check("GET /geo-points -> 200", res.status === 200, res.status);
+  check("returns at least our 3 points", body.length >= 3, body.length);
+  check(
+    "items are pure { longitude, latitude, height }",
+    body.every((p) => Object.keys(p).sort().join(",") === "height,latitude,longitude"),
+    body[0],
+  );
+}
+
 // ADD POINT
 {
   const res = await app.request(`/analyses/${analysisId}/geo-points`, json({ longitude: 106.827153, latitude: -6.175092, height: 12.6 }));

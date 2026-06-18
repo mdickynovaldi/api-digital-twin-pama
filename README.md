@@ -41,6 +41,7 @@ Port dari pipeline Unity (`ComputeBounds/Area/Distances/Volume`). Karena di serv
 | `GET` | `/openapi.json` | Spesifikasi OpenAPI 3.1 |
 | `GET` | `/health` | Health check |
 | `POST` | `/compute` | Hitung pengukuran (tanpa simpan) |
+| `GET` | `/geo-points` | List **semua** titik lintas analysis, bentuk murni `{ longitude, latitude, height }` (tanpa id) |
 | `POST` | `/analyses` | Buat analysis |
 | `GET` | `/analyses` | List analysis |
 | `GET` | `/analyses/{id}` | Detail analysis + titik |

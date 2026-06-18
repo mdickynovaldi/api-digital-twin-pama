@@ -23,6 +23,30 @@ async function analysisExists(id: string): Promise<boolean> {
   return found !== null;
 }
 
+// --- GET /geo-points --------------------------------------------------------
+const listAllPoints = createRoute({
+  method: "get",
+  path: "/geo-points",
+  tags: [TAG],
+  summary: "List all geo points (coordinates only)",
+  description:
+    "Return every geo point across all analyses as plain `{ longitude, latitude, height }` — the same shape the Unity GeoPoint consumes (no ids).",
+  responses: {
+    200: {
+      content: jsonContent(z.array(GeoPointInputSchema)),
+      description: "All geo points (coordinates only)",
+    },
+  },
+});
+
+app.openapi(listAllPoints, async (c) => {
+  const points = await prisma.geoPoint.findMany({
+    orderBy: [{ analysisId: "asc" }, { order: "asc" }],
+    select: { longitude: true, latitude: true, height: true },
+  });
+  return c.json(points, 200);
+});
+
 // --- GET /analyses/{id}/geo-points ------------------------------------------
 const listPoints = createRoute({
   method: "get",
