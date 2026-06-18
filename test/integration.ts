@@ -1,5 +1,5 @@
 import "dotenv/config";
-import app from "../src/app.ts";
+import app from "../src/index.ts";
 
 /**
  * Full CRUD lifecycle test against a REAL database (the one in DATABASE_URL).

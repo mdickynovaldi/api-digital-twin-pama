@@ -1,4 +1,4 @@
-import app from "../src/app.ts";
+import app from "../src/index.ts";
 
 let failures = 0;
 function check(name: string, cond: boolean, extra?: unknown) {

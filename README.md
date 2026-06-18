@@ -115,7 +115,7 @@ npm run test:integration   # tes CRUD lengkap (butuh DATABASE_URL aktif)
 2. Di **Settings → Environment Variables**, tambahkan:
    - `DATABASE_URL` → connection string **pooled** Neon.
    - `DIRECT_URL` → connection string **direct** Neon.
-3. Deploy. Tidak perlu konfigurasi khusus — Vercel mendeteksi fungsi serverless di `api/`, dan `vercel.json` mengarahkan semua request ke fungsi tersebut. `prisma generate` jalan otomatis di `postinstall`.
+3. Deploy. **Zero-config** — Vercel mendeteksi preset **Hono** secara otomatis lewat entrypoint `src/index.ts` (yang `export default` sebuah app Hono), dan mengubah route-nya menjadi Vercel Functions (Node.js runtime, Fluid compute). `prisma generate` jalan otomatis di `postinstall` sebelum bundling. Tidak perlu `vercel.json`.
 4. Jalankan migration ke database produksi (sekali saja), dari mesin lokal yang `.env`-nya mengarah ke Neon:
 
    ```bash
@@ -171,10 +171,10 @@ curl -X POST http://localhost:3000/analyses \
 ## Struktur proyek
 
 ```
-api/index.ts            # Entry serverless Vercel (Hono handler)
 src/
-  app.ts                # Hono app: middleware, routes, OpenAPI doc, Scalar UI
-  server.ts             # Server lokal (@hono/node-server)
+  index.ts              # Entrypoint Vercel (plain Hono, default export) — preset Hono
+  application.ts        # OpenAPIHono: middleware, routes, OpenAPI doc, Scalar UI
+  dev-server.ts         # Server lokal (@hono/node-server)
   lib/
     prisma.ts           # Prisma Client + Neon driver adapter (singleton)
     geo.ts              # Port geometri Unity (WGS84 → ENU → pengukuran)
@@ -191,6 +191,5 @@ prisma/
   migrations/           # Migration SQL awal (0_init)
   seed.ts               # Data contoh
 prisma.config.ts        # Konfigurasi CLI Prisma 7
-vercel.json             # Rewrite semua path → /api
 test/                   # Smoke & integration test
 ```

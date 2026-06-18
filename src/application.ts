@@ -9,6 +9,8 @@ import analyses from "./routes/analyses.ts";
 import geoPoints from "./routes/geoPoints.ts";
 import compute from "./routes/compute.ts";
 
+// The OpenAPI-aware application. It is mounted into a plain Hono instance in
+// src/index.ts (Vercel's Hono preset expects a plain `new Hono()` default export).
 const app = createOpenAPIApp();
 
 // --- Middleware -------------------------------------------------------------
@@ -66,15 +68,5 @@ app.get(
     theme: "purple",
   }),
 );
-
-// --- Fallbacks --------------------------------------------------------------
-app.notFound((c) =>
-  c.json({ error: "Not Found", message: `No route for ${c.req.method} ${c.req.path}` }, 404),
-);
-
-app.onError((err, c) => {
-  console.error(err);
-  return c.json({ error: "Internal Server Error", message: err.message }, 500);
-});
 
 export default app;

@@ -14,6 +14,6 @@
     "resolveJsonModule": true,
     "verbatimModuleSyntax": false
   },
-  "include": ["src", "api", "prisma", "test", "prisma.config.ts"],
+  "include": ["src", "prisma", "test", "prisma.config.ts"],
   "exclude": ["node_modules", "generated"]
 }

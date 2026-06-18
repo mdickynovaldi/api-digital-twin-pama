@@ -5,10 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
-    "build": "prisma generate",
-    "vercel-build": "prisma generate",
+    "dev": "tsx watch src/dev-server.ts",
+    "start": "tsx src/dev-server.ts",
     "postinstall": "prisma generate",
     "typecheck": "tsc --noEmit",
     "test:smoke": "tsx test/smoke.ts",
