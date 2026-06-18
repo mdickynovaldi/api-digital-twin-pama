@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(git -C /Users/mochdickynovaldi/Documents/project-web/api-digital-twin-pama status)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(node -e \"const p=require\\('./node_modules/@prisma/adapter-neon/package.json'\\); console.log\\('main:',p.main,'module:',p.module,'types:',p.types\\); console.log\\('exports:',JSON.stringify\\(p.exports,null,1\\)\\)\")",
+      "Bash(node -e \"const p=require\\('./node_modules/@prisma/client/package.json'\\); console.log\\(JSON.stringify\\(p.exports['./runtime/client'],null,1\\)\\)\")",
+      "Bash(grep -E \"wasm-base64\\\\.\\(js|mjs\\)$\")"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+node_modules
+
+# Environment variables (keep .env.example tracked)
+.env
+.env.*
+!.env.example
+
+# Prisma generated client
+/generated/prisma
+
+# Vercel
+.vercel
+
+# Misc
+*.log
+.DS_Store
+dist

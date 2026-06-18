@@ -1,0 +1,65 @@
+// Prisma schema for the Digital Twin volumetric / geo-point API.
+// Based on the Unity `RuntimeVolumetricVisualizer` (GeoPoint + measurements).
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// A volumetric analysis: an ordered polygon of geo points plus the
+/// measurements derived from them (mirrors the Unity component fields).
+model Analysis {
+  id   String @id @default(cuid())
+  name String
+
+  /// Reference (datum) height used when computing volume. Maps to
+  /// `referenceHeight` in the Unity script.
+  referenceHeight Float @default(0)
+  /// Visual line width for the polygon outline. Maps to `lineWidth`.
+  lineWidth       Float @default(3)
+
+  // --- Derived measurements (computed from the geo points) ---
+  /// Horizontal (shoelace) area in square metres.
+  area   Float?
+  /// Volume = area * |avgHeight - referenceHeight| in cubic metres.
+  volume Float?
+  /// Bounding-box extents in the local tangent frame (metres).
+  xSize  Float?
+  ySize  Float?
+  zSize  Float?
+  /// Length of each polygon edge, in order, looping back to the start.
+  segmentDistances Float[] @default([])
+
+  geoPoints GeoPoint[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("analyses")
+}
+
+/// A single WGS84 geo point. The JSON shape `{ longitude, latitude, height }`
+/// matches the `GeoPoint` consumed by the Unity script.
+model GeoPoint {
+  id String @id @default(cuid())
+
+  longitude Float
+  latitude  Float
+  height    Float
+
+  /// Position of this point within the polygon (0-based).
+  order Int @default(0)
+
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId String
+
+  createdAt DateTime @default(now())
+
+  @@index([analysisId])
+  @@map("geo_points")
+}
